@@ -5,13 +5,9 @@ import com.example.gccoffeeproject.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import java.nio.ByteBuffer;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import static com.example.gccoffeeproject.Utils.*;
+import java.util.*;
+
+import static com.example.gccoffeeproject.JdbcUtils.*;
 
 public class ProductJdbcRepository implements ProductRepository {
 
@@ -28,7 +24,12 @@ public class ProductJdbcRepository implements ProductRepository {
 
     @Override
     public Product insert(Product product) {
-        return null;
+        var update = jdbcTemplate.update("INSERT INTO products(product_id, product_name, category, price, description, created_at, updated_at)" +
+                " VALUES (UUID_TO_BIN(:productId), :productId, :productName, :category, :price, :description, :createdAt, :updatedAt)", toParamMap(product));
+        if (update != 1) {
+            throw new RuntimeException("Nothing was inserted");
+        }
+        return product;
     }
 
     @Override
@@ -66,4 +67,19 @@ public class ProductJdbcRepository implements ProductRepository {
         var updatedAt = toLocalDateTime(resultSet.getTimestamp("updated_at"));
         return new Product(productId, productName, category, price, description, createdAt, updatedAt);
     };
+
+    private Map<String, ?> toParamMap(Product product) {
+        var paramMap = new HashMap<String, Object>();
+
+        paramMap.put("productId", product.getProductId().toString().getBytes());
+        paramMap.put("productName",  product.getProductName());
+        paramMap.put("category", product.getCategory().toString());
+        paramMap.put("price", product.getPrice());
+        paramMap.put("description", product.getDescription());
+        paramMap.put("createdAt", product.getCreatedAt());
+        paramMap.put("updatedAt", product.getUpdatedAt());
+
+        return paramMap;
+    }
+
 }
