@@ -2,6 +2,7 @@ package com.example.gccoffeeproject.repository;
 
 import com.example.gccoffeeproject.model.Category;
 import com.example.gccoffeeproject.model.Product;
+import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
 import java.util.List;

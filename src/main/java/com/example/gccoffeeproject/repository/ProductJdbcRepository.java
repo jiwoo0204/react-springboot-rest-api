@@ -4,11 +4,13 @@ import com.example.gccoffeeproject.model.Category;
 import com.example.gccoffeeproject.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
 import static com.example.gccoffeeproject.JdbcUtils.*;
 
+@Repository
 public class ProductJdbcRepository implements ProductRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -25,7 +27,7 @@ public class ProductJdbcRepository implements ProductRepository {
     @Override
     public Product insert(Product product) {
         var update = jdbcTemplate.update("INSERT INTO products(product_id, product_name, category, price, description, created_at, updated_at)" +
-                " VALUES (UUID_TO_BIN(:productId), :productName, :category, :price, :description, :createdAt, :updatedAt)", toParamMap(product));
+                " VALUES(UNHEX(REPLACE(:productId, '-', '')), :productName, :category, :price, :description, :createdAt, :updatedAt)", toParamMap(product));
         if (update != 1) {
             throw new RuntimeException("Nothing was inserted");
         }
