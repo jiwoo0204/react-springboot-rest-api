@@ -4,15 +4,16 @@ import com.example.gccoffeeproject.model.Category;
 import com.example.gccoffeeproject.model.Product;
 import com.wix.mysql.EmbeddedMysql;
 import com.wix.mysql.ScriptResolver;
+import com.wix.mysql.config.Charset;
 import com.wix.mysql.distribution.Version;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
 import java.util.UUID;
 
+import static com.wix.mysql.distribution.Version.v5_7_latest;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static com.wix.mysql.EmbeddedMysql.anEmbeddedMysql;
@@ -26,13 +27,14 @@ class ProductJdbcRepositoryTest {
 
     @BeforeAll
     static void setup() {
-        var config = aMysqldConfig(Version.v5_7_latest)
+        var config = aMysqldConfig(v5_7_latest)
+                .withCharset(Charset.UTF8)
                 .withPort(2215)
                 .withUser("test", "test1234!")
                 .withTimeZone("Asia/Seoul")
                 .build();
         embeddedMysql = anEmbeddedMysql(config)
-                .addSchema("test-order_mgmt", ScriptResolver.classPathScripts("schema.sql")) // resource의 파일을 DB로 설정
+                .addSchema("test-order_mgmt", ScriptResolver.classPathScript("schema.sql"))
                 .start();
     }
 

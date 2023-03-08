@@ -2,6 +2,7 @@ package com.example.gccoffeeproject.repository;
 
 import com.example.gccoffeeproject.model.Category;
 import com.example.gccoffeeproject.model.Product;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
