@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.wix.mysql.distribution.Version.v5_7_latest;
@@ -25,7 +24,6 @@ import static com.wix.mysql.config.MysqldConfig.*;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductJdbcRepositoryTest {
-
     static EmbeddedMysql embeddedMysql;
 
     @BeforeAll
